@@ -1,7 +1,5 @@
-# python note taking app
 import pygame
 
-# pygame setup
 pygame.init()
 pygame.display.set_caption("Notes")
 screen = pygame.display.set_mode((1280, 720))
@@ -9,6 +7,8 @@ clock = pygame.time.Clock()
 running = True
 text = [""]
 line = 0
+column = 0
+cursor = [line, column]
 font = pygame.font.SysFont("Times New Roman", 30)
 
 while running:
@@ -18,23 +18,47 @@ while running:
 
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_BACKSPACE:
-                if line == 0 and text[0] == "":
-                    print("Nothing to delete")
-                    print(text)
-                elif text[line] == "" and text != "":
-                    text.pop()
-                    line-=1
-                if text[0] != "": 
-                    text[line] = text[line][:-1]
-                    print(text)
+                if text != [""]:
+                    if (text[line] == "" and text != "" or column == 0 and line != 0):
+                        if len(text[line]) == 0:
+                            del text[line]
+                        line-=1
+                        column = len(text[line])
+                        print(f"line: {line} column: {column}")
+                    elif text[line] != "" and not (line == 0 and column == 0): 
+                        text[line] = text[line][:column - 1] + text[line][column:]
+                        column-=1
+                        print(f"line: {line} column: {column}")
 
             elif event.key == pygame.K_RETURN:
                 text.append("")
                 line+=1
+                column = 0
+                cursor = [line, column]
+                print(f"line: {line} column: {column}")
+
+            elif event.key == pygame.K_LEFT:
+                if not column <= 0:
+                    column-=1
+                    print(f"line: {line} column: {column}")
+            elif event.key == pygame.K_RIGHT:
+                if not column == len(text[line]):
+                    column+=1
+                    print(f"line: {line} column: {column}")
+            elif event.key == pygame.K_UP:
+                if not line <= 0:
+                    line-=1
+                    print(f"line: {line} column: {column}")
+            elif event.key == pygame.K_DOWN:
+                if not line + 1 == len(text):
+                    line+=1
+                    print(f"line: {line} column: {column}")
+
             else:
                 try:
-                    text[line] += (event.unicode)
-                    print(text)
+                    text[line] = text[line][:column] + (event.unicode) + text[line][column:]
+                    column += 1
+                    print(f"line: {line} column: {column}")
                 except:
                     print("Not a key")
 
@@ -43,7 +67,6 @@ while running:
     for i in range(len(text)):
         text_surface = font.render(text[i], False, (255,255,255))
         screen.blit(text_surface, (3, i * 30))
-
 
 
     pygame.display.flip()
