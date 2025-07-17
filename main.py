@@ -13,7 +13,7 @@ while running:
 
             running = False
 
-    screen.fill("grey7")
+    screen.fill("greygrey77")
     pygame.display.flip()
     clock.tick(180)
 
