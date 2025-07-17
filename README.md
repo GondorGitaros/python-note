@@ -1,4 +1,5 @@
 # Python Note Taking App
 
-'''pip install -r requirements.txt'''
-'''python3 main.py'''
+### Usage
+```pip install -r requirements.txt```</br>
+```python3 main.py```
