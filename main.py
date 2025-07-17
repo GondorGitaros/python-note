@@ -13,7 +13,17 @@ while running:
 
             running = False
 
-    screen.fill("greygrey77")
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_ESCAPE:
+                running = False
+
+
+            try:
+                chr(event.key)
+            except:
+                pass
+
+    screen.fill("grey7")
     pygame.display.flip()
     clock.tick(180)
 
